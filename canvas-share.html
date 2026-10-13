@@ -16,26 +16,28 @@ body{background:#f3f4f6;color:#fff;font:400 14px/1.5 Inter,Arial,sans-serif;-web
 button,input,select,textarea{font:inherit}
 
 /* ===== Share bar ===== */
-.share-bar{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:20px;height:var(--bar-h);padding:0 20px;background:linear-gradient(90deg,#141414,#1c1a19 60%,#141414);box-shadow:0 10px 30px -12px rgba(0,0,0,.55)}
+.share-bar{position:fixed;top:0;left:0;right:0;z-index:40;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;height:var(--bar-h);padding:0 20px;background:linear-gradient(90deg,#141414,#1c1a19 60%,#141414);box-shadow:0 10px 30px -12px rgba(0,0,0,.55)}
 .share-bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2) 55%,rgba(255,155,63,0))}
-.share-bar__logo{display:inline-flex;align-items:center;flex-shrink:0}
+.share-bar__logo{display:inline-flex;align-items:center;justify-self:start}
 .share-bar__logo img{display:block;width:70px;height:24px}
-.share-bar__copy{display:flex;align-items:center;gap:16px;min-width:0;flex:1}
-.share-bar__text{min-width:0}
+.share-bar__copy{display:flex;flex-direction:column;align-items:center;justify-self:center;min-width:0;text-align:center}
+.share-bar__text{min-width:0;text-align:center}
 .share-bar__line{margin:0;color:#fff;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .share-bar__sub{margin:1px 0 0;color:var(--muted);font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand-button{display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 22px;border:0;border-radius:8px;background:linear-gradient(97deg,var(--brand),var(--brand-2));color:#fff;font-size:14px;font-weight:600;line-height:1;text-decoration:none;cursor:pointer;white-space:nowrap}
 .brand-button:hover{filter:brightness(1.06)}
 .brand-button:focus-visible{outline:3px solid #ffb29f;outline-offset:3px}
-.share-bar__cta{flex-shrink:0;height:38px;padding:0 22px;font-size:14px;box-shadow:0 12px 28px -12px rgba(254,71,39,.8)}
+.share-bar__cta{justify-self:end;height:38px;padding:0 22px;font-size:14px;box-shadow:0 12px 28px -12px rgba(254,71,39,.8)}
 @media (max-width:1100px){.share-bar__sub{display:none}}
 @media (max-width:767px){
   :root{--bar-h:98px}
-  .share-bar{flex-wrap:wrap;align-content:center;gap:8px 14px;padding:10px 16px}
+  .share-bar{grid-template-columns:auto 1fr;grid-template-areas:"logo cta" "copy copy";align-content:center;gap:8px 14px;padding:10px 16px}
+  .share-bar__logo{grid-area:logo}
+  .share-bar__cta{grid-area:cta}
   .share-bar__logo img{width:64px;height:22px}
-  .share-bar__copy{flex:1 1 100%;order:3;gap:10px}
+  .share-bar__copy{grid-area:copy;justify-self:stretch}
   .share-bar__line{white-space:normal;font-size:14px}
-  .share-bar__cta{margin-left:auto;height:36px;padding:0 16px;font-size:13.5px}
+  .share-bar__cta{height:36px;padding:0 16px;font-size:13.5px}
 }
 
 /* ===== Canvas (unchanged product surface, shown as capture) ===== */
@@ -99,7 +101,7 @@ button,input,select,textarea{font:inherit}
       <p class="share-bar__sub">Bring a brief to the demo and leave with a plan for the next ad.</p>
     </div>
   </div>
-  <button class="brand-button share-bar__cta" type="button" data-open-demo data-page-type="share_page" data-cta-id="canvas_share_banner_book_demo" data-section-id="share_banner" data-cta-location="nav">Book a Demo</button>
+  <button class="brand-button share-bar__cta" type="button" data-open-demo data-page-type="share_page" data-cta-id="canvas_share_banner_book_demo" data-section-id="share_banner" data-cta-location="nav">Start with a brief</button>
 </header>
 
 <main class="share-canvas" aria-label="Project canvas">
