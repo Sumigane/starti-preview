@@ -1521,7 +1521,12 @@ main h3:not(.insight-reveal h3):not(.fx-sitemap h3):not([class*="proto"] h3){fon
 @media (max-width:720px){.cs-section#showcase .car__bottom{padding:0 20px 20px}}
 </style>
 <script id="showcase-canvas-cta-js">
-(()=>{document.querySelectorAll('#showcase .car__canvas[href]').forEach(a=>a.addEventListener('pointerdown',e=>e.stopPropagation()));})();
+(()=>{document.querySelectorAll('#showcase .car__canvas[href]').forEach(a=>a.addEventListener('pointerdown',e=>e.stopPropagation()));
+/* 画布链接渲染时带上本页已采集的来源参数(st_touch 的 UTM 与 gclid),分享页按现有规则从 URL 采集 */
+const keys=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','gclid'];
+const decorate=()=>{let t={};try{t=JSON.parse(localStorage.getItem('st_touch')||'{}')||{};}catch{}
+document.querySelectorAll('#showcase .car__canvas[href]').forEach(a=>{try{const u=new URL(a.getAttribute('href'),location.href);keys.forEach(k=>{if(t[k])u.searchParams.set(k,t[k]);else u.searchParams.delete(k);});a.href=u.href;}catch{}});};
+window.addEventListener('load',decorate);window.addEventListener('pageshow',decorate);})();
 </script>
 </body>
 </html>
