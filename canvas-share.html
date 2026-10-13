@@ -91,7 +91,7 @@ button,input,select,textarea{font:inherit}
 .evlog__panel pre b{color:#ffb59e}
 </style>
 </head>
-<body data-page-type="share_page" data-page-name="canvas_share" data-share-project-id="b69f99f7-15db-43f9-807a-d9a97d81274c" data-interest="ai-studio" data-preview="1">
+<body data-page-type="share_page" data-page-name="canvas_share" data-share-project-id="b69f99f7-15db-43f9-807a-d9a97d81274c" data-preview="1">
 
 <header class="share-bar" id="share-bar" aria-label="Starti">
   <a class="share-bar__logo" href="https://starti.ai/ai-studio" target="_blank" rel="noopener" aria-label="Starti AI Studio"><img src="assets/logo-on-dark.svg" alt="Starti" width="80" height="28"></a>
@@ -151,9 +151,7 @@ button,input,select,textarea{font:inherit}
   const body = document.body, q = new URLSearchParams(location.search);
   const projectId = q.get('projectId') || body.dataset.shareProjectId || '';
   body.dataset.shareProjectId = projectId;
-  const interestParam = q.get('interest');
-  const interest = ['ai-studio', 'creative-studio'].includes(interestParam) ? interestParam : (body.dataset.interest || 'ai-studio');
-  body.dataset.interest = interest; document.querySelector('#demo-form input[name=interest]').value = interest;
+  document.querySelector('#demo-form input[name=interest]').value = 'ai-studio';
   const frame = document.getElementById('canvas-frame'); if (frame && projectId) frame.src = frame.src.replace(/projectId=[^&]*/, 'projectId=' + encodeURIComponent(projectId));
 
   /* ---- Modal UI only. Tracking, submit, Calendly come from the shared module below. ---- */

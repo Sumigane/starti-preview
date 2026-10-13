@@ -88,7 +88,8 @@ const buildEvent = (page           , now        )                      => ({
   page_path: page.pagePath,
   page_type: page.pageType,
   page_name: document.body.dataset.pageName || '',
-  active_seconds: Math.max(0, Math.floor(getActiveMilliseconds(page, now) / 1000))
+  active_seconds: Math.max(0, Math.floor(getActiveMilliseconds(page, now) / 1000)),
+  ...(document.body.dataset.shareProjectId ? { share_project_id: document.body.dataset.shareProjectId } : {})
 })
 
 const syncPageActivity = (page           , now        )       => {
