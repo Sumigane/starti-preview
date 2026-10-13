@@ -82,6 +82,7 @@ button,input,select,textarea{font:inherit}
 
 /* ===== Event log (mock only) ===== */
 .evlog{position:fixed;left:16px;bottom:16px;z-index:50;font-size:12px}
+.evlog[hidden]{display:none}
 .evlog__toggle{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border:0;border-radius:999px;background:#151515;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.6)}
 .evlog__toggle i{width:7px;height:7px;border-radius:50%;background:var(--brand-2)}
 .evlog__panel{display:none;width:min(420px,calc(100vw - 32px));max-height:300px;overflow:auto;margin-bottom:10px;padding:12px 14px;border-radius:12px;background:#151515;color:#e6e6e6;box-shadow:0 20px 40px -16px rgba(0,0,0,.7)}
@@ -240,6 +241,7 @@ button,input,select,textarea{font:inherit}
   const show = (obj) => { n += 1; count.textContent = n; const pre = document.createElement('pre'); const name = obj && obj.event ? obj.event : 'page identity'; pre.innerHTML = '<b>' + name + '</b> ' + JSON.stringify(obj).slice(0, 600); log.prepend(pre); };
   layer.push = function (obj) { show(obj); return Array.prototype.push.call(this, obj); };
   const evlog = document.getElementById('evlog'), toggle = document.getElementById('evlog-toggle');
+  if (!/[?&]debug=1(&|$)/.test(location.search)) evlog.hidden = true; // 调试面板默认隐藏,地址加 ?debug=1 显示
   toggle.addEventListener('click', () => { const open = evlog.classList.toggle('is-open'); toggle.setAttribute('aria-expanded', String(open)); });
 
   /* ---- Page identity from the share URL: projectId and interest ---- */
