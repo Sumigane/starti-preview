@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Video-Agent | Starti AI Studio</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#fe4727;--brand-2:#ff9b3f;--dark:#151515;--dark-2:#1c1c1c;--line-dark:#3b3b3b;--muted:#b3b3b3;--text-dark-muted:#bfbfbf;--bar-h:52px}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#f3f4f6;color:#fff;font:400 14px/1.5 Inter,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit}
+
+/* ===== Share bar ===== */
+.share-bar{position:fixed;top:0;left:0;right:0;z-index:40;display:flex;align-items:center;gap:20px;height:var(--bar-h);padding:0 20px;background:linear-gradient(90deg,#141414,#1c1a19 60%,#141414);box-shadow:0 10px 30px -12px rgba(0,0,0,.55)}
+.share-bar::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-2) 55%,rgba(255,155,63,0))}
+.share-bar__logo{display:inline-flex;align-items:center;flex-shrink:0}
+.share-bar__logo img{display:block;width:70px;height:24px}
+.share-bar__copy{display:flex;align-items:center;gap:16px;min-width:0;flex:1}
+.share-bar__text{min-width:0}
+.share-bar__line{margin:0;color:#fff;font-size:14px;font-weight:600;letter-spacing:-.01em;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.share-bar__sub{margin:1px 0 0;color:var(--muted);font-size:12px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-button{display:inline-flex;align-items:center;justify-content:center;height:42px;padding:0 22px;border:0;border-radius:8px;background:linear-gradient(97deg,var(--brand),var(--brand-2));color:#fff;font-size:14px;font-weight:600;line-height:1;text-decoration:none;cursor:pointer;white-space:nowrap}
+.brand-button:hover{filter:brightness(1.06)}
+.brand-button:focus-visible{outline:3px solid #ffb29f;outline-offset:3px}
+.share-bar__cta{flex-shrink:0;height:38px;padding:0 22px;font-size:14px;box-shadow:0 12px 28px -12px rgba(254,71,39,.8)}
+@media (max-width:1100px){.share-bar__sub{display:none}}
+@media (max-width:767px){
+  :root{--bar-h:98px}
+  .share-bar{flex-wrap:wrap;align-content:center;gap:8px 14px;padding:10px 16px}
+  .share-bar__logo img{width:64px;height:22px}
+  .share-bar__copy{flex:1 1 100%;order:3;gap:10px}
+  .share-bar__line{white-space:normal;font-size:14px}
+  .share-bar__cta{margin-left:auto;height:36px;padding:0 16px;font-size:13.5px}
+}
+
+/* ===== Canvas (unchanged product surface, shown as capture) ===== */
+:root{--old-bar:44px}
+@media (max-width:767px){:root{--old-bar:56px}}
+.share-canvas{position:fixed;left:0;right:0;bottom:0;top:var(--bar-h);overflow:hidden;background:#f3f4f6}
+.share-canvas iframe{display:block;border:0;width:100%;height:calc(100% + var(--old-bar));margin-top:calc(-1 * var(--old-bar))}
+
+/* ===== Demo modal ===== */
+.share-modal{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:24px}
+.share-modal[hidden]{display:none}
+.share-modal__backdrop{position:absolute;inset:0;background:rgba(10,10,10,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.demo__card{position:relative;width:min(600px,100%);max-height:calc(100vh - 48px);overflow:auto;padding:30px 30px 26px;border-radius:18px;background:var(--dark);box-shadow:0 0 0 1px rgba(255,255,255,.06),0 40px 80px -30px rgba(0,0,0,.9)}
+.demo__card>h2{margin:0 0 6px;color:#fff;font-size:26px;font-weight:600;letter-spacing:-.035em;line-height:1.15}
+.demo__card>p{margin:0 0 20px;color:var(--text-dark-muted);font-size:13.5px}
+.share-modal__close{position:absolute;top:14px;right:14px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.06);color:#fff;font-size:20px;line-height:1;cursor:pointer}
+.share-modal__close:hover{background:rgba(255,255,255,.12)}
+.demo-form{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.demo-form label{display:flex;flex-direction:column;min-width:0}
+.demo-form .full{grid-column:1/-1}
+.demo-form .field-label{margin-bottom:5px;color:var(--text-dark-muted);font-size:12.5px;font-weight:500}
+.demo-form .required{color:var(--brand);margin-left:4px;font-weight:600}
+.demo-form input,.demo-form select,.demo-form textarea{width:100%;height:42px;padding:0 12px;border:1px solid var(--line-dark);border-radius:8px;background:#151515;color:#fff;font-size:14px;line-height:1.4;transition:border-color .15s ease,box-shadow .15s ease}
+.demo-form textarea{height:76px;padding:10px 12px;resize:vertical}
+.demo-form input::placeholder,.demo-form textarea::placeholder{color:#6f6f6f}
+.demo-form input:focus,.demo-form select:focus,.demo-form textarea:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 3px rgba(254,71,39,.18)}
+.demo-form select{appearance:none;-webkit-appearance:none;padding-right:38px;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none'><path d='m5 7.5 5 5 5-5' stroke='%23bfbfbf' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/></svg>");background-repeat:no-repeat;background-position:right 12px center;background-size:16px}
+.demo-form select option{color:#fff;background:#1c1c1c}
+.demo-form .honeypot{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.demo-form .is-invalid{border-color:var(--brand)}
+.demo-form .brand-button{width:100%;height:46px;margin-top:4px}
+.demo-form .form-privacy{grid-column:1/-1;margin:8px 0 0;color:#8f8f8f;font-size:11.5px;line-height:1.4}
+.demo-form .form-privacy a{color:#bfbfbf;text-decoration:underline;text-underline-offset:2px}
+#demo-submit-status{color:#ffb59e;font-size:12.5px}
+.demo__success{display:none;padding:12px 0 4px;text-align:center}
+.demo__success .mark{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:linear-gradient(97deg,var(--brand),var(--brand-2));color:#fff}
+.demo__success h3{margin:20px 0 8px;color:#fff;font-size:22px;font-weight:500;letter-spacing:-.03em}
+.demo__success p{margin:0 0 18px;color:var(--text-dark-muted);font-size:14px;line-height:1.55}
+.demo__card.is-sent .demo-form,.demo__card.is-sent>h2,.demo__card.is-sent>p{display:none}
+.demo__card.is-sent .demo__success{display:block}
+@media (max-width:640px){.demo-form{grid-template-columns:1fr}.demo__card{padding:24px 20px 20px}.demo__card>h2{font-size:22px}}
+
+/* ===== Event log (mock only) ===== */
+.evlog{position:fixed;left:16px;bottom:16px;z-index:50;font-size:12px}
+.evlog__toggle{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border:0;border-radius:999px;background:#151515;color:#fff;font-weight:600;cursor:pointer;box-shadow:0 10px 24px -10px rgba(0,0,0,.6)}
+.evlog__toggle i{width:7px;height:7px;border-radius:50%;background:var(--brand-2)}
+.evlog__panel{display:none;width:min(420px,calc(100vw - 32px));max-height:300px;overflow:auto;margin-bottom:10px;padding:12px 14px;border-radius:12px;background:#151515;color:#e6e6e6;box-shadow:0 20px 40px -16px rgba(0,0,0,.7)}
+.evlog.is-open{display:flex;flex-direction:column;align-items:flex-start}
+.evlog.is-open .evlog__panel{display:block}
+.evlog__panel pre{margin:0 0 10px;white-space:pre-wrap;word-break:break-all;font:11.5px/1.5 "SF Mono",Menlo,Consolas,monospace;color:#e6e6e6}
+.evlog__panel pre b{color:#ffb59e}
+</style>
+</head>
+<body data-page-type="share_page" data-page-name="canvas_share" data-share-project-id="b69f99f7-15db-43f9-807a-d9a97d81274c" data-interest="ai-studio" data-preview="1">
+
+<header class="share-bar" id="share-bar" aria-label="Starti">
+  <a class="share-bar__logo" href="https://starti.ai/ai-studio" target="_blank" rel="noopener" aria-label="Starti AI Studio"><img src="assets/logo-on-dark.svg" alt="Starti" width="80" height="28"></a>
+  <div class="share-bar__copy">
+    <div class="share-bar__text">
+      <p class="share-bar__line">Every scene has a reason. Every step has a sign-off.</p>
+      <p class="share-bar__sub">Bring a brief to the demo and leave with a plan for the next ad.</p>
+    </div>
+  </div>
+  <button class="brand-button share-bar__cta" type="button" data-open-demo data-page-type="share_page" data-cta-id="canvas_share_banner_book_demo" data-section-id="share_banner" data-cta-location="nav">Book a Demo</button>
+</header>
+
+<main class="share-canvas" aria-label="Project canvas">
+  <iframe id="canvas-frame" title="AI Studio project canvas" src="https://ad.starti.ai/canvas/?token=1a807991d860419494b44f03f8b8d4d6&amp;projectId=b69f99f7-15db-43f9-807a-d9a97d81274c&amp;brandId=33d50fc0-2f17-4607-a21e-6f691e0ce8af" allow="autoplay; fullscreen" loading="eager"></iframe>
+</main>
+
+<div class="share-modal" id="demo-modal" hidden>
+  <div class="share-modal__backdrop" data-close-demo></div>
+  <div class="demo__card" role="dialog" aria-modal="true" aria-labelledby="demo-title">
+    <button class="share-modal__close" type="button" aria-label="Close" data-close-demo>&times;</button>
+    <h2 id="demo-title">Book a demo</h2>
+    <p>Every field marked with an asterisk is required.</p>
+    <form class="demo-form" aria-label="Book a demo" data-form="book-demo" novalidate id="demo-form">
+      <input class="honeypot" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <label><span class="field-label">First name<span class="required" aria-hidden="true">*</span></span><input name="first_name" autocomplete="given-name" placeholder="Jane" required></label>
+      <label><span class="field-label">Last name<span class="required" aria-hidden="true">*</span></span><input name="last_name" autocomplete="family-name" placeholder="Doe" required></label>
+      <label class="full"><span class="field-label">Work email<span class="required" aria-hidden="true">*</span></span><input type="email" name="email" autocomplete="email" placeholder="jane@company.com" required></label>
+      <label><span class="field-label">Company<span class="required" aria-hidden="true">*</span></span><input name="company" autocomplete="organization" placeholder="Acme Inc." required></label>
+      <label><span class="field-label">Job title</span><input name="job_title" autocomplete="organization-title" placeholder="Head of Growth"></label>
+      <input type="hidden" name="interest" value="ai-studio">
+      <label class="full"><span class="field-label">Company size</span><select name="company_size"><option value="" selected>Select</option><option value="1 to 10">1 to 10</option><option value="11 to 50">11 to 50</option><option value="51 to 200">51 to 200</option><option value="201 to 1,000">201 to 1,000</option><option value="1,000+">1,000+</option></select></label>
+      <label class="full"><span class="field-label">What would you like to discuss?</span><textarea name="message" placeholder="The goal, the market, or questions for the team"></textarea></label>
+      <p id="demo-submit-status" class="form-privacy" role="status" tabindex="-1" hidden></p>
+      <button class="brand-button full" type="submit">Book a Demo</button>
+      <p class="form-privacy">Submit your details, then choose a time for your demo. We use your details only to respond to this request. See our <a href="https://starti.ai/privacy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+    </form>
+  </div>
+</div>
+
+<div class="evlog" id="evlog" data-mock-only>
+  <div class="evlog__panel" id="evlog-panel" aria-live="polite"></div>
+  <button class="evlog__toggle" type="button" id="evlog-toggle" aria-expanded="false"><i aria-hidden="true"></i>Events <span id="evlog-count">0</span></button>
+</div>
+
+<script>
+(() => {
+  /* ---- Mock-only event log: wraps the data layer before the shared module loads ---- */
+  const layer = window.gtmDataLayer = window.gtmDataLayer || [];
+  const log = document.getElementById('evlog-panel'), count = document.getElementById('evlog-count');
+  let n = 0;
+  const show = (obj) => { n += 1; count.textContent = n; const pre = document.createElement('pre'); const name = obj && obj.event ? obj.event : 'page identity'; pre.innerHTML = '<b>' + name + '</b> ' + JSON.stringify(obj).slice(0, 600); log.prepend(pre); };
+  layer.push = function (obj) { show(obj); return Array.prototype.push.call(this, obj); };
+  const evlog = document.getElementById('evlog'), toggle = document.getElementById('evlog-toggle');
+  toggle.addEventListener('click', () => { const open = evlog.classList.toggle('is-open'); toggle.setAttribute('aria-expanded', String(open)); });
+
+  /* ---- Page identity from the share URL: projectId and interest ---- */
+  const body = document.body, q = new URLSearchParams(location.search);
+  const projectId = q.get('projectId') || body.dataset.shareProjectId || '';
+  body.dataset.shareProjectId = projectId;
+  const interestParam = q.get('interest');
+  const interest = ['ai-studio', 'creative-studio'].includes(interestParam) ? interestParam : (body.dataset.interest || 'ai-studio');
+  body.dataset.interest = interest; document.querySelector('#demo-form input[name=interest]').value = interest;
+  const frame = document.getElementById('canvas-frame'); if (frame && projectId) frame.src = frame.src.replace(/projectId=[^&]*/, 'projectId=' + encodeURIComponent(projectId));
+
+  /* ---- Modal UI only. Tracking, submit, Calendly come from the shared module below. ---- */
+  const modal = document.getElementById('demo-modal'), form = document.getElementById('demo-form');
+  let lastFocus = null;
+  const openDemo = () => { lastFocus = document.activeElement; modal.hidden = false; body.style.overflow = 'hidden'; form.querySelector('input[name="first_name"]').focus(); };
+  const closeDemo = () => { modal.hidden = true; body.style.overflow = ''; if (lastFocus) lastFocus.focus(); };
+  document.querySelectorAll('[data-open-demo]').forEach(b => b.addEventListener('click', openDemo));
+  document.querySelectorAll('[data-close-demo]').forEach(b => b.addEventListener('click', closeDemo));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !modal.hidden && !document.querySelector('.calendly-overlay')) closeDemo(); });
+})();
+</script>
+<script src="Starti%20tracking.js"></script>
+</body>
+</html>
